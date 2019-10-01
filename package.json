@@ -4,7 +4,10 @@
   "description": "Node.js client for Blocktap.io cryptocurrency GraphQL API",
   "main": "src/index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha --recursive \"__tests__/**/*.spec.js\""
+    "test": "nyc --reporter=lcov --reporter=text mocha --recursive \"__tests__/**/*.spec.js\"",
+    "lint": "eslint src/** __tests__/**",
+    "format": "prettier src",
+    "compile": ""
   },
   "repository": {
     "type": "git",
