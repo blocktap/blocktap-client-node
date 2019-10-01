@@ -1,7 +1,7 @@
 {
   "name": "blocktap",
   "version": "0.1.0",
-  "description": "Blocktap.io client for Node.js",
+  "description": "Node.js client for Blocktap.io cryptocurrency GraphQL API",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha --recursive \"__tests__/**/*.spec.js\""
@@ -10,13 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/blocktap/blocktap-node.git"
   },
-  "keywords": [],
+  "keywords": ["blocktap", "client", "cryptocurrency", "graphql"],
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blocktap/blocktap-client-node/issues"
+    "url": "https://github.com/blocktap/blocktap-node/issues"
   },
-  "homepage": "https://github.com/blocktap/blocktap-client-node#readme",
+  "homepage": "https://github.com/blocktap/blocktap-node#readme",
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^6.5.1",
