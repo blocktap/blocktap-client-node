@@ -10,13 +10,13 @@ class BlocktapClient {
 	constructor(apikey) {
 		/**
 		 * API for blocktap
-		 * @typedef {string}
+		 * @type {string}
 		 */
 		this.apikey = apikey;
 
 		/**
 		 *
-		 * @typedef {string}
+		 * @type {string}
 		 */
 		this.hostname = 'api.blocktap.io';
 		this.path = '/graphql';
