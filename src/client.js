@@ -27,7 +27,7 @@ class BlocktapClient {
 	 * Sends a query to Blocktap.io
 	 * @param {object} p
 	 * @param {string} p.query GraphQL query
-	 * @param {object} p.variables
+	 * @param {object} [p.variables] Optional variables object
 	 * @returns {Promise<object>}
 	 */
 	query({ query, variables }) {

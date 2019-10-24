@@ -1,6 +1,6 @@
 {
   "name": "blocktap",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.js client for Blocktap.io cryptocurrency GraphQL API",
   "main": "src/index.js",
   "scripts": {
