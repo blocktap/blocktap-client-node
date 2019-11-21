@@ -33,7 +33,7 @@ class BlocktapClient {
 	query({ query, variables }) {
 		let headers = {};
 		if (this.apikey) {
-			headers['authentication'] = 'Bearer ' + this.apikey;
+			headers['Authorization'] = 'Bearer ' + this.apikey;
 		}
 		return request({
 			hostname: this.hostname,

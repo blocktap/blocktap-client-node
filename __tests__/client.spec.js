@@ -59,4 +59,18 @@ describe('BlocktapClient', () => {
 			});
 		});
 	});
+	describe('authenticated', () => {
+		before(function() {
+			if (!process.env.BLOCKTAP_KEY) {
+				this.skip();
+			}
+		});
+		describe('.query', () => {
+			it('should return restricted data', async () => {
+				let sut = new BlocktapClient(process.env.BLOCKTAP_KEY);
+				let result = await sut.query({ query: fixtures.restrictedData });
+				expect(result.data.market.ohlcv).to.not.be.null;
+			});
+		});
+	});
 });
