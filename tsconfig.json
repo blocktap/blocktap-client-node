@@ -7,7 +7,6 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*"],
+  "include": ["lib/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"],
-  "outDir": "dist"
 }
