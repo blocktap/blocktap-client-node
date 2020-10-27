@@ -30,7 +30,14 @@ query price {
 	market {}
 }`;
 
+function wait(timeout = 250) {
+	return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 describe("BlocktapClient", () => {
+	afterEach(async () => {
+		await wait();
+	});
 	describe("not authenticated", () => {
 		describe(".query()", () => {
 			it("should return results of valid query", async () => {

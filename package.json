@@ -7,7 +7,7 @@
     "prepublish": "npm run build",
     "build": "tsc",
     "test": "nyc --reporter=lcov --reporter=text --extension=.ts mocha --require ts-node/register --recursive \"__tests__/**/*.spec.ts\"",
-    "lint": "eslint lib/** __tests__/**",
+    "lint": "eslint lib/**/*.ts __tests__/**/*.ts",
     "format": "prettier --check \"lib/**/*.ts\"",
     "validate": "npm run format && npm run lint & npm run test"
   },
