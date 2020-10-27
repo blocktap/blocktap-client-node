@@ -1,8 +1,8 @@
-import { expect } from "chai";
 import { BlocktapClient } from "../lib";
-import { RequestError } from "../lib";
 import { CandlePeriod } from "../lib/types/CandlePeriod";
 import { MarketStatus } from "../lib/types/MarketStatus";
+import { RequestError } from "../lib";
+import { expect } from "chai";
 
 function expectReject(promise: Promise<any>, done: Mocha.Done) {
 	promise.then(() => done(new Error("Expected rejection"))).catch(() => done());
@@ -31,8 +31,8 @@ query price {
 }`;
 
 describe("BlocktapClient", () => {
-	xdescribe("not authenticated", () => {
-		describe(".query", () => {
+	describe("not authenticated", () => {
+		describe(".query()", () => {
 			it("should return results of valid query", async () => {
 				const sut = new BlocktapClient();
 				const result = await sut.query({ query: fixtures.basicQuery });
@@ -73,10 +73,34 @@ describe("BlocktapClient", () => {
 			}
 			sut = new BlocktapClient(process.env.BLOCKTAP_KEY);
 		});
-		describe(".query", () => {
+		describe(".query()", () => {
 			it("should return restricted data", async () => {
 				const result = await sut.query({ query: fixtures.restrictedData });
 				expect(result.data.market.ohlcv).to.not.be.null;
+			});
+		});
+
+		describe(".currencies()", () => {
+			it("returns currencies", async () => {
+				const result = await sut.currencies({ currencySymbol: "BTC" });
+				expect(result[0].currencySymbol).to.equal("BTC");
+				expect(result[0].currencyName).to.equal("Bitcoin");
+				expect(result[0].isActive).to.equal(true);
+			});
+
+			it("returns currencies filtered by symbol", async () => {
+				const result = await sut.currencies({ currencySymbol: "BT%" });
+				expect(result.length).be.gt(0);
+			});
+
+			it("returns currencies filtered by symbol", async () => {
+				const result = await sut.currencies({ currencyName: "Bit%" });
+				expect(result.length).be.gt(0);
+			});
+
+			it("returns currencies filtered by isActive", async () => {
+				const result = await sut.currencies({ isActive: false });
+				expect(result.length).be.gt(0);
 			});
 		});
 
@@ -90,7 +114,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		xdescribe(".markets()", () => {
+		describe(".markets()", () => {
 			it("no filters", async () => {
 				const result = await sut.markets();
 				expect(result.length).to.be.gt(0);
@@ -102,7 +126,7 @@ describe("BlocktapClient", () => {
 				expect(result[0].baseSymbol).to.be.a("string");
 				expect(result[0].quoteSymbol).to.be.a("string");
 				expect(result[0].remoteId).to.be.a("string");
-			});
+			}).timeout(10000);
 
 			it("exchange filter", async () => {
 				const result = await sut.markets({ exchangeSymbol: "CoinbasePro" });
@@ -125,7 +149,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		xdescribe(".market()", () => {
+		describe(".market()", () => {
 			it("when exists", async () => {
 				const result = await sut.market("coinbasepro_btc_usd");
 				expect(result.id).to.equal("coinbasepro_btc_usd");
@@ -143,7 +167,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		xdescribe(".candles()", () => {
+		describe(".candles()", () => {
 			it("when valid returns candles", async () => {
 				const result = await sut.candles(
 					"coinbasepro_btc_usd",
@@ -209,7 +233,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		xdescribe(".trades()", () => {
+		describe(".trades()", () => {
 			it("when valid returns trades", async () => {
 				const result = await sut.trades(
 					"coinbasepro_btc_usd",

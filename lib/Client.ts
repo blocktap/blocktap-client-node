@@ -1,13 +1,15 @@
-import { request } from "./request";
 import * as querystring from "querystring";
-import { WebProtocol } from "./WebProtocol";
-import { HttpMethod } from "./HttpMethod";
-import { MarketFilters } from "./types/MarketFilter";
-import { Market } from "./types/Market";
-import { CandlePeriod } from "./types/CandlePeriod";
 import { Candle } from "./types/Candle";
-import { Trade } from "./types/Trade";
+import { CandlePeriod } from "./types/CandlePeriod";
+import { Currency } from "./types/Currency";
+import { CurrencyFilter } from "./types/CurrencyFilter";
 import { Exchange } from "./types/Exchange";
+import { HttpMethod } from "./HttpMethod";
+import { Market } from "./types/Market";
+import { MarketFilters } from "./types/MarketFilter";
+import { Trade } from "./types/Trade";
+import { WebProtocol } from "./WebProtocol";
+import { request } from "./request";
 
 export class BlocktapClient {
 	public graphqlHostname = "api.blocktap.io";
@@ -34,6 +36,14 @@ export class BlocktapClient {
 			json: { query, variables },
 			protocol: this.graphqlProtocol,
 		});
+	}
+
+	/**
+	 * Retrieves a list of currencies using the optional filters
+	 */
+	public async currencies(filters?: CurrencyFilter): Promise<Currency[]> {
+		const qs = filters ? "?" + querystring.encode(filters) : "";
+		return await this._getRest("/currencies" + qs);
 	}
 
 	/**
