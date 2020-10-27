@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { BlocktapClient } from "../lib";
 import { RequestError } from "../lib";
+import { CandlePeriod } from "../lib/types/CandlePeriod";
 import { MarketStatus } from "../lib/types/MarketStatus";
 
 function expectReject(promise: Promise<any>, done: Mocha.Done) {
@@ -114,7 +115,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		describe("./market()", () => {
+		xdescribe(".market()", () => {
 			it("when exists", async () => {
 				const result = await sut.market("coinbasepro_btc_usd");
 				expect(result.id).to.equal("coinbasepro_btc_usd");
@@ -129,6 +130,72 @@ describe("BlocktapClient", () => {
 
 			it("when doesn't exist", done => {
 				expectReject(sut.market("coinbaser_btc_usd"), done);
+			});
+		});
+
+		xdescribe(".candles()", () => {
+			it("when valid returns candles", async () => {
+				const result = await sut.candles(
+					"coinbasepro_btc_usd",
+					"2020-01-01T00:00:00.000Z",
+					"2020-01-02T00:00:00.000Z",
+					CandlePeriod._1h
+				);
+				expect(result.length).to.equal(24);
+				expect(result[0][0]).to.equal("1577836800");
+				expect(result[0][1]).to.equal("7165.72000000");
+				expect(result[0][2]).to.equal("7165.72000000");
+				expect(result[0][3]).to.equal("7136.05000000");
+				expect(result[0][4]).to.equal("7150.35000000");
+				expect(result[0][5]).to.equal("250.84981195");
+			});
+
+			it("when invalid market throws error", done => {
+				expectReject(
+					sut.candles(
+						"coinbaser_btc_usd",
+						"2020-01-01T00:00:00.000Z",
+						"2020-01-02T00:00:00.000Z",
+						CandlePeriod._1h
+					),
+					done
+				);
+			});
+
+			it("when invalid start throws error", done => {
+				expectReject(
+					sut.candles(
+						"coinbasepro_btc_usd",
+						"2020-01-01",
+						"2020-01-02T00:00:00.000Z",
+						CandlePeriod._1h
+					),
+					done
+				);
+			});
+
+			it("when invalid end throws error", done => {
+				expectReject(
+					sut.candles(
+						"coinbasepro_btc_usd",
+						"2020-01-01T00:00:00.000Z",
+						"2020-01-02",
+						CandlePeriod._1h
+					),
+					done
+				);
+			});
+
+			it("when invalid period throws error", done => {
+				expectReject(
+					sut.candles(
+						"coinbasepro_btc_usd",
+						"2020-01-01T00:00:00.000Z",
+						"2020-01-02T00:00:00.000Z",
+						"_1s" as any
+					),
+					done
+				);
 			});
 		});
 	});
