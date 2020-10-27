@@ -7,6 +7,7 @@ import { Market } from "./types/Market";
 import { CandlePeriod } from "./types/CandlePeriod";
 import { Candle } from "./types/Candle";
 import { Trade } from "./types/Trade";
+import { Exchange } from "./types/Exchange";
 
 export class BlocktapClient {
 	public graphqlHostname = "api.blocktap.io";
@@ -33,6 +34,13 @@ export class BlocktapClient {
 			json: { query, variables },
 			protocol: this.graphqlProtocol,
 		});
+	}
+
+	/**
+	 * Retrieves a list of exchanges
+	 */
+	public async exchanges(): Promise<Exchange[]> {
+		return await this._getRest("/exchanges");
 	}
 
 	/**

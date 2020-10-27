@@ -80,6 +80,16 @@ describe("BlocktapClient", () => {
 			});
 		});
 
+		describe(".exchanges()", () => {
+			it("returns exchanges", async () => {
+				const result = await sut.exchanges();
+				const binance = result.find(p => p.exchangeSymbol === "Binance");
+				expect(binance.exchangeSymbol).to.equal("Binance");
+				expect(binance.exchangeName).to.equal("Binance");
+				expect(binance.isActive).to.equal(true);
+			});
+		});
+
 		xdescribe(".markets()", () => {
 			it("no filters", async () => {
 				const result = await sut.markets();
@@ -199,7 +209,7 @@ describe("BlocktapClient", () => {
 			});
 		});
 
-		describe(".trades()", () => {
+		xdescribe(".trades()", () => {
 			it("when valid returns trades", async () => {
 				const result = await sut.trades(
 					"coinbasepro_btc_usd",
