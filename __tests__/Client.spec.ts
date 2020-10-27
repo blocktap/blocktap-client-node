@@ -198,5 +198,46 @@ describe("BlocktapClient", () => {
 				);
 			});
 		});
+
+		describe(".trades()", () => {
+			it("when valid returns trades", async () => {
+				const result = await sut.trades(
+					"coinbasepro_btc_usd",
+					"2020-01-01T00:00:00.000Z",
+					"2020-01-01T00:01:00.000Z"
+				);
+				expect(result.length).to.equal(41);
+				expect(result[0].id).to.equal("80350317");
+				expect(result[0].unix).to.equal(1577836800222);
+				expect(result[0].side).to.equal("Ask");
+				expect(result[0].price).to.equal("7165.72000000");
+				expect(result[0].amount).to.equal("0.01392747");
+			});
+
+			it("when invalid market throws error", done => {
+				expectReject(
+					sut.trades(
+						"coinbaser_btc_usd",
+						"2020-01-01T00:00:00.000Z",
+						"2020-01-01T00:01:00.000Z"
+					),
+					done
+				);
+			});
+
+			it("when invalid start throws error", done => {
+				expectReject(
+					sut.trades("coinbasepro_btc_usd", "2020-01-01", "2020-01-01T00:01:00.000Z"),
+					done
+				);
+			});
+
+			it("when invalid end throws error", done => {
+				expectReject(
+					sut.trades("coinbasepro_btc_usd", "2020-01-01T00:00:00.000Z", "2020-01-01"),
+					done
+				);
+			});
+		});
 	});
 });

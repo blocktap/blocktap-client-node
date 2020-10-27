@@ -6,6 +6,7 @@ import { MarketFilters } from "./types/MarketFilter";
 import { Market } from "./types/Market";
 import { CandlePeriod } from "./types/CandlePeriod";
 import { Candle } from "./types/Candle";
+import { Trade } from "./types/Trade";
 
 export class BlocktapClient {
 	public graphqlHostname = "api.blocktap.io";
@@ -65,6 +66,17 @@ export class BlocktapClient {
 	): Promise<Candle[]> {
 		const qs = querystring.encode({ startDate, endDate, period });
 		return await this._getRest(`/markets/${marketId}/candles?${qs}`);
+	}
+
+	/**
+	 * Retrieves trades for the market in the given time range.
+	 * @param marketId unique identifier for the market, such as `coinbasepro_btc_usd`
+	 * @param startDate start date in ISO-8601 format, such as `2020-01-01T00:00:00.000Z`
+	 * @param endDate end date exclusive in ISO-8601 format, such as `2020-01-02T00:00:00.000Z`
+	 */
+	public async trades(marketId: string, startDate: string, endDate: string): Promise<Trade[]> {
+		const qs = querystring.encode({ startDate, endDate });
+		return await this._getRest(`/markets/${marketId}/trades?${qs}`);
 	}
 
 	private async _getRest<T>(path: string): Promise<T> {
