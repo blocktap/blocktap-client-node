@@ -1,5 +1,6 @@
 import { MarketStatus } from "./MarketStatus";
 import { MarketType } from "./MarketType";
+import { OptionType } from "./OptionType";
 
 export type Market = {
 	id: string;
@@ -10,4 +11,7 @@ export type Market = {
 	baseSymbol: string;
 	quoteSymbol: string;
 	remoteId: string;
+	expiryDate: string;
+	optionType: OptionType;
+	optionStrike: string;
 };

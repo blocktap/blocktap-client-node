@@ -1,6 +1,8 @@
 import { BlocktapClient } from "../lib";
 import { CandlePeriod } from "../lib/types/CandlePeriod";
 import { MarketStatus } from "../lib/types/MarketStatus";
+import { MarketType } from "../lib/types/MarketType";
+import { OptionType } from "../lib/types/OptionType";
 import { RequestError } from "../lib";
 import { expect } from "chai";
 
@@ -154,6 +156,48 @@ describe("BlocktapClient", () => {
 				const result = await sut.markets({ marketStatus: MarketStatus.Active });
 				expect(result.every(p => p.marketStatus === MarketStatus.Active)).to.equal(true);
 			});
+
+			it("futures filter", async () => {
+				const result = await sut.markets({
+					marketStatus: MarketStatus.Active,
+					marketType: MarketType.Futures,
+				});
+				expect(result.every(p => p.marketType === MarketType.Futures)).to.equal(true);
+			}).timeout(10000);
+
+			it("swap filter", async () => {
+				const result = await sut.markets({
+					marketStatus: MarketStatus.Active,
+					marketType: MarketType.Swap,
+				});
+				expect(result.every(p => p.marketType === MarketType.Swap)).to.equal(true);
+			}).timeout(10000);
+
+			it("option filter", async () => {
+				const result = await sut.markets({
+					marketStatus: MarketStatus.Active,
+					marketType: MarketType.Option,
+				});
+				expect(result.every(p => p.marketType === MarketType.Option)).to.equal(true);
+			}).timeout(10000);
+
+			it("call option", async () => {
+				const result = await sut.markets({
+					marketStatus: MarketStatus.Active,
+					marketType: MarketType.Option,
+					optionType: OptionType.Call,
+				});
+				expect(result.every(p => p.optionType === OptionType.Call)).to.equal(true);
+			}).timeout(10000);
+
+			it("put option", async () => {
+				const result = await sut.markets({
+					marketStatus: MarketStatus.Active,
+					marketType: MarketType.Option,
+					optionType: OptionType.Put,
+				});
+				expect(result.every(p => p.optionType === OptionType.Put)).to.equal(true);
+			}).timeout(10000);
 		});
 
 		describe(".market()", () => {
@@ -167,6 +211,13 @@ describe("BlocktapClient", () => {
 				expect(result.baseSymbol).to.equal("BTC");
 				expect(result.quoteSymbol).to.equal("USD");
 				expect(result.remoteId).to.equal("BTC-USD");
+			});
+
+			it("with option data", async () => {
+				const result = await sut.market("ledgerx_btc_usd_20925827");
+				expect(result.expiryDate).to.equal("2020-12-18");
+				expect(result.optionType).to.equal("Call");
+				expect(result.optionStrike).to.equal("5000.00000000");
 			});
 
 			it("when doesn't exist", done => {
