@@ -5,7 +5,8 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   },
   "include": ["lib/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"],
