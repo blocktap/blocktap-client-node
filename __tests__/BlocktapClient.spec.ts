@@ -55,8 +55,7 @@ describe("BlocktapClient", () => {
 			});
 
 			it("should reject on invalid request", () => {
-				const sut = new BlocktapClient();
-				sut.graphqlPath = "/graphqll";
+				const sut = new BlocktapClient(undefined, "https://api.blocktap.io/graphqll");
 				return sut
 					.query({ query: fixtures.basicQuery })
 					.then(() => {
@@ -140,22 +139,22 @@ describe("BlocktapClient", () => {
 			it("exchange filter", async () => {
 				const result = await sut.markets({ exchangeSymbol: "CoinbasePro" });
 				expect(result.every(p => p.exchangeSymbol === "CoinbasePro")).to.equal(true);
-			});
+			}).timeout(10000);
 
 			it("base filter", async () => {
 				const result = await sut.markets({ baseSymbol: "BTC" });
 				expect(result.every(p => p.baseSymbol === "BTC")).to.equal(true);
-			});
+			}).timeout(10000);
 
 			it("quote filter", async () => {
 				const result = await sut.markets({ quoteSymbol: "BTC" });
 				expect(result.every(p => p.quoteSymbol === "BTC")).to.equal(true);
-			});
+			}).timeout(10000);
 
 			it("status filter", async () => {
 				const result = await sut.markets({ marketStatus: MarketStatus.Active });
 				expect(result.every(p => p.marketStatus === MarketStatus.Active)).to.equal(true);
-			});
+			}).timeout(10000);
 
 			it("futures filter", async () => {
 				const result = await sut.markets({

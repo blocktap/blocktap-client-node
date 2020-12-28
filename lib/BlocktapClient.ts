@@ -1,40 +1,40 @@
 import * as querystring from "querystring";
+import * as url from "url";
 import { Candle } from "./types/Candle";
 import { CandlePeriod } from "./types/CandlePeriod";
 import { Currency } from "./types/Currency";
 import { CurrencyFilter } from "./types/CurrencyFilter";
 import { Exchange } from "./types/Exchange";
-import { HttpMethod } from "./HttpMethod";
 import { Market } from "./types/Market";
 import { MarketFilters } from "./types/MarketFilter";
 import { Trade } from "./types/Trade";
-import { WebProtocol } from "./WebProtocol";
 import { request } from "./request";
 
 export class BlocktapClient {
-	public graphqlHostname = "api.blocktap.io";
-	public graphqlPath = "/graphql";
-	public graphqlProtocol = WebProtocol.https;
-
-	public restHostname = "rest.blocktap.io";
-	public restProtocol = WebProtocol.https;
+	public readonly graphqlParts: url.UrlWithStringQuery;
+	public readonly restParts: url.UrlWithStringQuery;
 
 	/**
 	 * Creates a BlocktapClient with the specified API Key.
 	 * @param apiKey optional API key for Blocktap.io
 	 */
-	constructor(readonly apiKey?: string) {}
+	constructor(
+		readonly apiKey?: string,
+		readonly graphqlUri = "https://api.blocktap.io/graphql",
+		readonly restUri = "https://rest.blocktap.io"
+	) {
+		this.graphqlParts = url.parse(graphqlUri);
+		this.restParts = url.parse(restUri);
+	}
 
 	/**
 	 * Sends a query to Blocktap.io graphql endpoint
 	 */
 	public async query({ query, variables }: { query: any; variables?: any }): Promise<any> {
 		return request({
-			hostname: this.graphqlHostname,
-			path: this.graphqlPath,
+			...this.graphqlParts,
 			headers: this._authHeaders(),
 			json: { query, variables },
-			protocol: this.graphqlProtocol,
 		});
 	}
 
@@ -99,11 +99,10 @@ export class BlocktapClient {
 
 	private async _getRest<T>(path: string): Promise<T> {
 		return request({
-			hostname: this.restHostname,
+			...this.restParts,
 			path,
-			method: HttpMethod.GET,
+			method: "GET",
 			headers: this._authHeaders(),
-			protocol: this.restProtocol,
 		});
 	}
 

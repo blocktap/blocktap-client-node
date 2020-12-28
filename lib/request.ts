@@ -1,28 +1,20 @@
 import * as http from "http";
 import * as https from "https";
-import { HttpMethod } from "./HttpMethod";
 import { RequestError } from "./RequestError";
-import { WebProtocol } from "./WebProtocol";
 
-export type RequestArgs = {
-	hostname: string;
-	path: string;
-	method?: HttpMethod;
-	headers?: any;
-	json?: any;
-	protocol?: WebProtocol;
-};
+export type RequestArgs = http.RequestOptions & https.RequestOptions & { json?: any };
 
 export function request<T>({
+	protocol,
 	hostname,
+	port,
 	path,
-	method = HttpMethod.POST,
-	headers = {},
 	json,
-	protocol = WebProtocol.https,
+	headers = {},
+	method = "POST",
 }: RequestArgs): Promise<T> {
 	return new Promise((resolve, reject) => {
-		const client = protocol === WebProtocol.https ? https : http;
+		const client = protocol === "https:" ? https : http;
 		let payload;
 
 		if (json) {
@@ -32,7 +24,7 @@ export function request<T>({
 			headers["content-length"] = bytes;
 		}
 
-		const req = client.request({ hostname, path, method, headers }, res => {
+		const req = client.request({ hostname, port, path, method, headers }, res => {
 			const buffers: Buffer[] = [];
 			res.on("error", err => reject(err));
 			res.on("data", data => buffers.push(data));
